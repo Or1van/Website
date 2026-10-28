@@ -1,0 +1,238 @@
+.header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  transition:
+    transform 0.6s var(--ease-out),
+    background-color 0.5s,
+    border-color 0.5s;
+  border-bottom: 1px solid transparent;
+}
+.header[data-scrolled="true"] {
+  background: rgba(6, 7, 8, 0.72);
+  backdrop-filter: blur(14px);
+  border-bottom-color: var(--line);
+}
+.header[data-hidden="true"] {
+  transform: translateY(-100%);
+}
+.header[data-open="true"] {
+  background: var(--bg);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  height: var(--header-h);
+  width: min(1440px, 100% - 2 * var(--gutter));
+  margin-inline: auto;
+}
+
+.logo {
+  display: grid;
+  line-height: 1;
+}
+.logoMark {
+  font: 700 19px/1 var(--font-display);
+  letter-spacing: 0.16em;
+}
+.logoSub {
+  margin-top: 5px;
+  font: 400 8.5px/1 var(--font-sans);
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.nav {
+  display: flex;
+  gap: clamp(18px, 2.6vw, 40px);
+}
+.navLink {
+  position: relative;
+  padding: 6px 0;
+  font: 400 11px/1 var(--font-sans);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  transition: color 0.3s;
+}
+.navLink::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s var(--ease-out);
+}
+.navLink:hover {
+  color: var(--ink);
+}
+.navLink:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.iconLink {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  transition: border-color 0.3s;
+}
+.iconLink:hover {
+  border-color: var(--gold);
+}
+.badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: var(--blood);
+  font: 500 10px/17px var(--font-sans);
+  text-align: center;
+}
+.account {
+  font: 500 11px/1 var(--font-sans);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  max-width: 14ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.burger {
+  display: none;
+  width: 38px;
+  height: 38px;
+  position: relative;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.burger span {
+  position: absolute;
+  left: 9px;
+  right: 9px;
+  height: 1px;
+  background: var(--ink);
+  transition: transform 0.4s var(--ease-out);
+}
+.burger span:first-child {
+  top: 15px;
+}
+.burger span:last-child {
+  top: 22px;
+}
+.header[data-open="true"] .burger span:first-child {
+  transform: translateY(3.5px) rotate(45deg);
+}
+.header[data-open="true"] .burger span:last-child {
+  transform: translateY(-3.5px) rotate(-45deg);
+}
+
+.mobile {
+  position: fixed;
+  inset: var(--header-h) 0 0;
+  background: var(--bg);
+  padding: 40px var(--gutter);
+  overflow-y: auto;
+}
+.mobile nav {
+  display: grid;
+  gap: 8px;
+}
+.mobile a {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+  font: 700 clamp(30px, 9vw, 44px)/1 var(--font-display);
+  text-transform: uppercase;
+  animation: menuIn 0.6s var(--ease-out) both;
+}
+.mobile a span {
+  font: 400 11px/1 var(--font-sans);
+  color: var(--gold);
+  letter-spacing: 0.2em;
+}
+@keyframes menuIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+/* Language switch: "UA / EN" with the active one highlighted. */
+.lang button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 19px;
+  background: none;
+  color: var(--muted);
+  font: 500 10.5px/1 var(--font-sans);
+  letter-spacing: 0.16em;
+  cursor: pointer;
+  transition:
+    border-color 0.3s,
+    color 0.3s;
+}
+.lang button:hover {
+  border-color: var(--gold);
+  color: var(--ink);
+}
+.lang button [data-current] {
+  color: var(--gold);
+}
+.lang button[data-pending="true"] {
+  opacity: 0.5;
+}
+.langSep {
+  opacity: 0.4;
+}
+.langMobile {
+  display: none;
+  margin-top: 32px;
+}
+
+@media (max-width: 960px) {
+  .nav {
+    display: none;
+  }
+  .burger {
+    display: block;
+  }
+  .account {
+    display: none;
+  }
+  .langDesktop {
+    display: none;
+  }
+  .langMobile {
+    display: block;
+  }
+}

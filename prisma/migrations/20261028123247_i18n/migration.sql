@@ -1,0 +1,19 @@
+-- AlterTable
+ALTER TABLE "Character" ADD COLUMN     "bioEn" TEXT NOT NULL DEFAULT '',
+ADD COLUMN     "nameEn" TEXT NOT NULL DEFAULT '',
+ADD COLUMN     "quoteEn" TEXT NOT NULL DEFAULT '',
+ADD COLUMN     "titleEn" TEXT NOT NULL DEFAULT '';
+
+-- AlterTable
+ALTER TABLE "Edition" ADD COLUMN     "featuresEn" TEXT[] DEFAULT ARRAY[]::TEXT[],
+ADD COLUMN     "nameEn" TEXT NOT NULL DEFAULT '',
+ADD COLUMN     "taglineEn" TEXT NOT NULL DEFAULT '';
+
+-- AlterTable
+ALTER TABLE "Location" ADD COLUMN     "descriptionEn" TEXT NOT NULL DEFAULT '',
+ADD COLUMN     "kindEn" TEXT NOT NULL DEFAULT '',
+ADD COLUMN     "nameEn" TEXT NOT NULL DEFAULT '';
+
+-- AlterTable
+ALTER TABLE "Trailer" ADD COLUMN     "descriptionEn" TEXT NOT NULL DEFAULT '',
+ADD COLUMN     "titleEn" TEXT NOT NULL DEFAULT '';

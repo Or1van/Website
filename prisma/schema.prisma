@@ -1,0 +1,159 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  CANCELLED
+}
+
+model User {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  name         String
+  passwordHash String
+  role         Role       @default(USER)
+  createdAt    DateTime   @default(now())
+  sessions     Session[]
+  cartItems    CartItem[]
+  orders       Order[]
+}
+
+/// `id` is the SHA-256 of the cookie token, so a leaked database row cannot be replayed as a cookie.
+model Session {
+  id        String   @id
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+/// Content models carry Ukrainian fields plus optional *En translations; an empty
+/// translation falls back to Ukrainian.
+model Character {
+  id        String  @id @default(cuid())
+  slug      String  @unique
+  name      String
+  title     String
+  bio       String
+  quote     String
+  nameEn    String  @default("")
+  titleEn   String  @default("")
+  bioEn     String  @default("")
+  quoteEn   String  @default("")
+  image     String
+  /// CSS object-position for the portrait crop, e.g. "50% 20%".
+  focus     String  @default("50% 30%")
+  sortOrder Int     @default(0)
+  published Boolean @default(true)
+}
+
+model Edition {
+  id         String      @id @default(cuid())
+  slug       String      @unique
+  name       String
+  tagline    String
+  priceCents Int
+  currency   String      @default("usd")
+  features   String[]
+  nameEn     String      @default("")
+  taglineEn  String      @default("")
+  featuresEn String[]    @default([])
+  image      String
+  focus      String      @default("50% 50%")
+  sortOrder  Int         @default(0)
+  active     Boolean     @default(true)
+  cartItems  CartItem[]
+  orderItems OrderItem[]
+}
+
+model Location {
+  id            String  @id @default(cuid())
+  slug          String  @unique
+  name          String
+  kind          String  @default("Ігрова локація")
+  description   String
+  image         String
+  focus         String  @default("50% 50%")
+  nameEn        String  @default("")
+  kindEn        String  @default("")
+  descriptionEn String  @default("")
+  sortOrder     Int     @default(0)
+  published     Boolean @default(true)
+}
+
+model Trailer {
+  id            String  @id @default(cuid())
+  title         String
+  description   String
+  titleEn       String  @default("")
+  descriptionEn String  @default("")
+  image         String
+  /// YouTube video id (11 chars). Null means "coming soon".
+  youtubeId     String?
+  sortOrder     Int     @default(0)
+  published     Boolean @default(true)
+}
+
+model CartItem {
+  id        String  @id @default(cuid())
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  editionId String
+  edition   Edition @relation(fields: [editionId], references: [id], onDelete: Cascade)
+  quantity  Int     @default(1)
+
+  @@unique([userId, editionId])
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  userId          String
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status          OrderStatus @default(PENDING)
+  totalCents      Int
+  currency        String
+  stripeSessionId String?     @unique
+  createdAt       DateTime    @default(now())
+  items           OrderItem[]
+
+  @@index([userId])
+}
+
+/// Name and price are copied at purchase time so later edition edits do not rewrite history.
+model OrderItem {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  editionId String?
+  edition   Edition? @relation(fields: [editionId], references: [id], onDelete: SetNull)
+  name      String
+  unitCents Int
+  quantity  Int
+}
+
+model Subscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+
+/// Fixed-window counters for rate limiting, keyed like "login:ip:1.2.3.4".
+model RateLimit {
+  key     String   @id
+  count   Int
+  resetAt DateTime
+}

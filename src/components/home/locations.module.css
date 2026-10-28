@@ -1,0 +1,191 @@
+.section {
+  position: relative;
+  z-index: 2;
+  padding: clamp(80px, 10vw, 140px) 0;
+  background:
+    radial-gradient(ellipse 50% 60% at 15% 50%, rgba(125, 20, 20, 0.08), transparent 70%),
+    var(--bg);
+  overflow: hidden;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.8fr) minmax(0, 2fr);
+  gap: clamp(32px, 5vw, 80px);
+  align-items: center;
+  padding-left: max(var(--gutter), (100vw - 1280px) / 2);
+}
+
+.intro {
+  display: grid;
+  gap: 20px;
+}
+.title {
+  font: 500 clamp(40px, 4.6vw, 68px)/1 var(--font-serif);
+}
+.lead {
+  max-width: 44ch;
+  color: var(--ink-dim);
+}
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+.arrow {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 40px;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition:
+    background-color 0.4s,
+    color 0.4s,
+    border-color 0.4s;
+}
+.arrow:hover:not(:disabled) {
+  background: var(--ink);
+  color: var(--bg);
+}
+.arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.counter {
+  margin-left: 12px;
+  font: 400 12px/1 var(--font-sans);
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.progress {
+  height: 1px;
+  max-width: 260px;
+  background: var(--line);
+}
+.progress span {
+  display: block;
+  height: 100%;
+  background: var(--gold);
+  transform-origin: left;
+  transition: transform 0.9s var(--ease-out);
+}
+
+.viewport {
+  overflow: hidden;
+  touch-action: pan-y;
+  user-select: none;
+  cursor: grab;
+}
+.viewport:active {
+  cursor: grabbing;
+}
+.track {
+  display: flex;
+  gap: 18px;
+  width: max-content;
+  padding-right: var(--gutter);
+  will-change: transform;
+}
+
+.card {
+  position: relative;
+  width: clamp(240px, 24vw, 340px);
+  aspect-ratio: 3 / 4.5;
+  overflow: hidden;
+  background: var(--bg-3);
+}
+.media {
+  position: absolute;
+  inset: 0;
+}
+.media img {
+  filter: grayscale(0.35) brightness(0.84) contrast(1.05);
+  transition:
+    transform 1.4s var(--ease-out),
+    filter 1s;
+  pointer-events: none;
+}
+.card:hover .media img {
+  transform: scale(1.08);
+  filter: grayscale(0) brightness(0.85) contrast(1.05);
+}
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(6, 7, 8, 0.1) 30%, rgba(6, 7, 8, 0.92) 100%);
+  pointer-events: none;
+}
+
+.caption {
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  bottom: 22px;
+  z-index: 1;
+}
+.num {
+  display: block;
+  margin-bottom: 10px;
+  font: 400 11px/1 var(--font-sans);
+  letter-spacing: 0.24em;
+  color: var(--gold);
+}
+.caption h3 {
+  font: 500 26px/1.1 var(--font-serif);
+}
+.kind {
+  margin-top: 6px;
+  font: 400 10px/1 var(--font-sans);
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.desc {
+  display: grid;
+  grid-template-rows: 0fr;
+  margin-top: 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-dim);
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition:
+    max-height 0.8s var(--ease-out),
+    opacity 0.6s,
+    margin-top 0.6s;
+}
+.card:hover .desc,
+.card:focus-within .desc {
+  max-height: 160px;
+  margin-top: 14px;
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .desc {
+    max-height: none;
+    opacity: 1;
+    margin-top: 12px;
+  }
+}
+
+@media (max-width: 860px) {
+  .layout {
+    grid-template-columns: 1fr;
+    padding-right: 0;
+  }
+  .intro {
+    padding-right: var(--gutter);
+  }
+  .card {
+    width: 78vw;
+    max-width: 340px;
+  }
+}

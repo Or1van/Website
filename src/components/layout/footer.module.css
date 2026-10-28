@@ -1,0 +1,68 @@
+.footer {
+  position: relative;
+  z-index: 2;
+  border-top: 1px solid var(--line);
+  background: var(--bg);
+  padding-top: 64px;
+}
+.inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 40px;
+  padding-bottom: 48px;
+}
+.brand {
+  display: grid;
+  gap: 6px;
+  max-width: 420px;
+}
+.logo {
+  font: 700 34px/1 var(--font-display);
+  letter-spacing: 0.12em;
+}
+.sub {
+  font: 400 9px/1 var(--font-sans);
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.note {
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.cols {
+  display: flex;
+  gap: clamp(40px, 8vw, 120px);
+}
+.cols div {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+.cols a {
+  font-size: 14px;
+  color: var(--ink-dim);
+  transition: color 0.3s;
+}
+.cols a:hover {
+  color: var(--gold);
+}
+.head {
+  margin-bottom: 6px;
+  font: 500 10px/1 var(--font-sans);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 22px 0 28px;
+  border-top: 1px solid var(--line);
+  font-size: 12px;
+  color: var(--muted);
+}
